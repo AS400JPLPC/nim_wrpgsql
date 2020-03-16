@@ -79,7 +79,7 @@ proc clearRcd() =
 
 proc  unpack_Rcd(ConnSql : PGsql; n : var  tabletype ; r : int32 ) =
   clearRcd()
-  for r in 0 .. ConnSql.Rang :
+  for r in 0 .. r :
     for f in 0 .. ConnSql.Field:
       case ConnSql.sqlName(f)
 

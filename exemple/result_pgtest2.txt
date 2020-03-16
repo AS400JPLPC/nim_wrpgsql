@@ -5,18 +5,18 @@ status : CONNECTION_OK
 Database : CGIFCH
 GetUser : readonly
 ---------------------------
-Rcd.vdate    2018-07-02
-Rcd.vnumeric 1951.00
-Rcd.vtext    tata
-Rcd.vonchar  Y
-Rcd.vheure   17:34:01
-Rcd.vkey     1011
-Rcd.vbool    false
-Rcd.vchar    JP-Laroche
+Rcd.vdate    1951-10-12
+Rcd.vnumeric 5000.00
+Rcd.vtext    totsxxxx
+Rcd.vonchar  C
+Rcd.vheure   11:10:01
+Rcd.vkey     101
+Rcd.vbool    true
+Rcd.vchar    
 ---------------------------
 ---------------------------
 Rcd.vdate    2018-07-02
-Rcd.vnumeric 1951.00
+Rcd.vnumeric 15.21
 Rcd.vtext    tata
 Rcd.vonchar  Y
 Rcd.vheure   17:34:01
@@ -71,19 +71,19 @@ pause : 315
 ---no rescpet order field--
 
 ---------------------------
-Rcd.vdate    2018-07-02
-Rcd.vnumeric 1951.00
-Rcd.vtext    tata
-Rcd.vonchar  Y
-Rcd.vheure   17:34:01
-Rcd.vkey     1011
-Rcd.vbool    false
-Rcd.vchar    JP-Laroche
+Rcd.vdate    1951-10-12
+Rcd.vnumeric 5000.00
+Rcd.vtext    totsxxxx
+Rcd.vonchar  C
+Rcd.vheure   11:10:01
+Rcd.vkey     101
+Rcd.vbool    true
+Rcd.vchar    
 ---------------------------
 
 ---------------------------
 Rcd.vdate    2018-07-02
-Rcd.vnumeric 1951.00
+Rcd.vnumeric 15.21
 Rcd.vtext    tata
 Rcd.vonchar  Y
 Rcd.vheure   17:34:01
@@ -95,5 +95,6 @@ num col :0
 NOT FOUND :client 1012 non trouvé
 Proc sqlQuery : SELECT *  FROM tabletype WHERE vkey = 1012  ORDER BY vkey ;
 suite
+25.21
 STOP 
 
