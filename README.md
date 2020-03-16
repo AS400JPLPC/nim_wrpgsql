@@ -33,26 +33,27 @@ Bonjour, je me suis appuyé sur les sources déposés dans github nim orm et div
 	 - commentaire
 	 
 - **des fonctions traditionnelles**
-QUERY / PAGE / FIRST / LAST / NEXT / PRIOR / LOCK 
-BEGIN / COMMIT / ROLLBACK 
-SAVEPOINT / SAVEPOINTROLLBACK  /  SAVEPOINTRELEASE
-Connect
-closeDb
-clearRslt
-GetDb
-GetUser
-GetPassword
-GetHost
-GetPort
-isTable
-sqlValue
-sqlName
-sqlNumber
-sqlisNul
-sqlLen
-sqlType
-sqlColInfo
-sqlQueryInfo
+	QUERY / PAGE / FIRST / LAST / NEXT / PRIOR / LOCK 
+	BEGIN / COMMIT / ROLLBACK 
+	SAVEPOINT / SAVEPOINTROLLBACK  /  SAVEPOINTRELEASE
+	Connect
+	closeDb
+	clearRslt
+	GetDb
+	GetUser
+	GetPassword
+	GetHost
+	GetPort
+	isTable
+	sqlValue
+	sqlName
+	sqlNumber
+	sqlisNul
+	sqlLen
+	sqlType
+	sqlColInfo
+	sqlQueryInfo
+	<<
 <<
 
 ex:
