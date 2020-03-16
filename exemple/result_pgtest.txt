@@ -1,0 +1,499 @@
+[..TEST.. 
+ 
+status : CONNECTION_OK
+Database : CGIFCH
+GetUser : readonly
+1
+31
+621
+33
+ setFirst test eof etc...
+1
+8
+Name :vdate  value : 1951-10-12
+Name :vnumeric  value : 5000.00
+Name :vtext  value : totsxxxx
+Name :vonchar  value : C
+Name :vheure  value : 11:10:01
+Name :vkey  value : 101
+Name :vbool  value : t
+Name :vchar  value : 
+--
+Name :vdate  value : 2018-07-02
+Name :vnumeric  value : 1951.00
+Name :vtext  value : tata
+Name :vonchar  value : Y
+Name :vheure  value : 17:34:01
+Name :vkey  value : 1011
+Name :vbool  value : f
+Name :vchar  value : JP-Laroche
+--
+pause 78 :0
+ Back test eof etc...
+1
+8
+Name :vdate  value : 2018-07-02
+Name :vnumeric  value : 1951.00
+Name :vtext  value : tata
+Name :vonchar  value : Y
+Name :vheure  value : 17:34:01
+Name :vkey  value : 1011
+Name :vbool  value : f
+Name :vchar  value : JP-Laroche
+--
+Name :vdate  value : 1951-10-12
+Name :vnumeric  value : 5000.00
+Name :vtext  value : totsxxxx
+Name :vonchar  value : C
+Name :vheure  value : 11:10:01
+Name :vkey  value : 101
+Name :vbool  value : t
+Name :vchar  value : 
+--
+pause 93 :0
+__LIMIT / PAGE__
+10
+1
+  value : 671005
+  value : 671063
+  value : 671118
+  value : 671142
+  value : 771140
+  value : 771154
+  value : 771171
+  value : 871077
+  value : 871097
+  value : 871111
+pause 109 :0
+test sqllock
+1
+8
+pause 119 :0
+ATTENTION:  aucune transaction en cours
+1
+8
+Name :vchar
+name :vdate
+tableName :tabletype
+typ :(kind: dbDate, name: "date")
+position :0
+maxchar :0
+precision :0
+scale :0
+comment :filed date
+---------------------------
+name :vnumeric
+tableName :tabletype
+typ :(kind: dbDecimal, name: "numeric")
+position :1
+maxchar :0
+precision :8
+scale :2
+comment :field  decimal (8,2)
+---------------------------
+name :vtext
+tableName :tabletype
+typ :(kind: dbVarchar, name: "text")
+position :2
+maxchar :0
+precision :0
+scale :0
+comment :field text
+---------------------------
+name :vonchar
+tableName :tabletype
+typ :(kind: dbFixedChar, name: "bpchar")
+position :3
+maxchar :1
+precision :0
+scale :0
+comment :field char
+---------------------------
+name :vheure
+tableName :tabletype
+typ :(kind: dbTime, name: "time")
+position :4
+maxchar :0
+precision :0
+scale :0
+comment :field heure
+---------------------------
+name :vkey
+tableName :tabletype
+typ :(kind: dbDecimal, name: "numeric")
+position :5
+maxchar :0
+precision :7
+scale :0
+comment :field  decimal (7,0)
+---------------------------
+name :vbool
+tableName :tabletype
+typ :(kind: dbBool, name: "bool")
+position :6
+maxchar :0
+precision :0
+scale :0
+comment :Test bool
+---------------------------
+name :vchar
+tableName :tabletype
+typ :(kind: dbFixedChar, name: "bpchar")
+position :7
+maxchar :10
+precision :0
+scale :0
+comment :field char (10)
+---------------------------
+Name :vdate  value : 2018-07-02   --- Type : (kind: dbDate, name: "date")
+Name :vnumeric  value : 1951.00   --- Type : (kind: dbDecimal, name: "numeric")
+Name :vtext  value : tata   --- Type : (kind: dbVarchar, name: "text")
+Name :vonchar  value : Y   --- Type : (kind: dbFixedChar, name: "bpchar")
+Name :vheure  value : 17:34:01   --- Type : (kind: dbTime, name: "time")
+Name :vkey  value : 1011   --- Type : (kind: dbDecimal, name: "numeric")
+Name :vbool  value : f   --- Type : (kind: dbBool, name: "bool")
+Name :vchar  value : JP-Laroche   --- Type : (kind: dbFixedChar, name: "bpchar")
+1
+2
+Name :NBNDOS  value : 271049
+Name :C0ZNOM  value : PRISME SOLUTIONS              
+pause 166:0
+pause 168:0
+name :NBNDOS
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :0
+maxchar :0
+precision :8
+scale :0
+comment :N.CHRONO DOSSIER
+---------------------------
+name :C0ZNOM
+tableName :FC0CLI
+typ :(kind: dbFixedChar, name: "bpchar")
+position :1
+maxchar :30
+precision :0
+scale :0
+comment :NOM / RAISON SOCIAL
+---------------------------
+---------------------------
+name :vdate
+tableName :tabletype
+typ :(kind: dbDate, name: "date")
+position :1
+maxchar :0
+precision :0
+scale :0
+comment :filed date
+---------------------------
+name :vnumeric
+tableName :tabletype
+typ :(kind: dbDecimal, name: "numeric")
+position :2
+maxchar :0
+precision :8
+scale :2
+comment :field  decimal (8,2)
+---------------------------
+name :vtext
+tableName :tabletype
+typ :(kind: dbVarchar, name: "text")
+position :3
+maxchar :0
+precision :0
+scale :0
+comment :field text
+---------------------------
+name :vonchar
+tableName :tabletype
+typ :(kind: dbFixedChar, name: "bpchar")
+position :4
+maxchar :1
+precision :0
+scale :0
+comment :field char
+---------------------------
+name :vheure
+tableName :tabletype
+typ :(kind: dbTime, name: "time")
+position :5
+maxchar :0
+precision :0
+scale :0
+comment :field heure
+---------------------------
+name :vkey
+tableName :tabletype
+typ :(kind: dbDecimal, name: "numeric")
+position :6
+maxchar :0
+precision :7
+scale :0
+comment :field  decimal (7,0)
+---------------------------
+name :vbool
+tableName :tabletype
+typ :(kind: dbBool, name: "bool")
+position :7
+maxchar :0
+precision :0
+scale :0
+comment :Test bool
+---------------------------
+name :vchar
+tableName :tabletype
+typ :(kind: dbFixedChar, name: "bpchar")
+position :8
+maxchar :10
+precision :0
+scale :0
+comment :field char (10)
+---------------------------
+00000000000000000000
+---------------------------
+name :NBCAPR
+tableName :FNBDOS
+typ :(kind: dbFixedChar, name: "bpchar")
+position :1
+maxchar :2
+precision :0
+scale :0
+comment :CODE ACTI.PRODUIT
+---------------------------
+name :NBCSTD
+tableName :FNBDOS
+typ :(kind: dbFixedChar, name: "bpchar")
+position :2
+maxchar :8
+precision :0
+scale :0
+comment :COD_ART._STK/DIVERS
+---------------------------
+name :NBCDPO
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :3
+maxchar :0
+precision :2
+scale :0
+comment :CODE DEPOT
+---------------------------
+name :NBCGIM
+tableName :FNBDOS
+typ :(kind: dbFixedChar, name: "bpchar")
+position :4
+maxchar :1
+precision :0
+scale :0
+comment :COD_GESTION_IMP/STK
+---------------------------
+name :NBCHTR
+tableName :FNBDOS
+typ :(kind: dbFixedChar, name: "bpchar")
+position :5
+maxchar :8
+precision :0
+scale :0
+comment :CODE HAUTEUR
+---------------------------
+name :NBCREP
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :6
+maxchar :0
+precision :3
+scale :0
+comment :CODE REP / COURTIER
+---------------------------
+name :NBCTVC
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :7
+maxchar :0
+precision :2
+scale :0
+comment :CODE TARIF  VTE
+---------------------------
+name :NBCUTR
+tableName :FNBDOS
+typ :(kind: dbFixedChar, name: "bpchar")
+position :8
+maxchar :5
+precision :0
+scale :0
+comment :CODE UNITE TARIFIC.
+---------------------------
+name :NB999E
+tableName :FNBDOS
+typ :(kind: dbDate, name: "date")
+position :9
+maxchar :0
+precision :0
+scale :0
+comment :DATE DE CREATION ENR
+---------------------------
+name :NB999M
+tableName :FNBDOS
+typ :(kind: dbDate, name: "date")
+position :10
+maxchar :0
+precision :0
+scale :0
+comment :DATE DE MODIFCATION
+---------------------------
+name :NBMQOT
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :11
+maxchar :0
+precision :8
+scale :2
+comment :M. PRIX QUOTA
+---------------------------
+name :NBMTRF
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :12
+maxchar :0
+precision :8
+scale :2
+comment :M. PRIX  TARIF
+---------------------------
+name :NBMPRV
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :13
+maxchar :0
+precision :8
+scale :2
+comment :M. PRIX  VENTE
+---------------------------
+name :NBNDOS
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :14
+maxchar :0
+precision :8
+scale :0
+comment :N.CHRONO DOSSIER
+---------------------------
+name :NBNLZE
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :15
+maxchar :0
+precision :4
+scale :0
+comment :LAIZE HORS TOUT
+---------------------------
+name :NBNCAR
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :16
+maxchar :0
+precision :2
+scale :0
+comment :N. NBR CARBONES
+---------------------------
+name :NBNFEU
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :17
+maxchar :0
+precision :2
+scale :0
+comment :N. NBR. FEUILLETS
+---------------------------
+name :NBQCDE
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :18
+maxchar :0
+precision :10
+scale :0
+comment :QTE_CDE
+---------------------------
+name :NBQFAC
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :19
+maxchar :0
+precision :10
+scale :0
+comment :QTE_FACTUREE
+---------------------------
+name :NBQLVA
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :20
+maxchar :0
+precision :10
+scale :0
+comment :QTE_à_LIVRER
+---------------------------
+name :NBQLVR
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :21
+maxchar :0
+precision :10
+scale :0
+comment :QTE_LIVREE_REELLE
+---------------------------
+name :NBQLVM
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :22
+maxchar :0
+precision :10
+scale :0
+comment :QTE_LIVREE_RESERVE
+---------------------------
+name :NBSHS
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :23
+maxchar :0
+precision :1
+scale :0
+comment :0/1  N=0 O=1 H.SERVC
+---------------------------
+name :NBTTAS
+tableName :FNBDOS
+typ :(kind: dbFixedChar, name: "bpchar")
+position :24
+maxchar :1
+precision :0
+scale :0
+comment :TOTAL/ACOMPTE
+---------------------------
+name :NBXCFT
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :25
+maxchar :0
+precision :5
+scale :0
+comment :X. COEF CODE TARIFI.
+---------------------------
+name :NBXCOM
+tableName :FNBDOS
+typ :(kind: dbDecimal, name: "numeric")
+position :26
+maxchar :0
+precision :5
+scale :2
+comment :X.TAUX DE COMMISSION
+---------------------------
+name :NBZIMP
+tableName :FNBDOS
+typ :(kind: dbFixedChar, name: "bpchar")
+position :27
+maxchar :30
+precision :0
+scale :0
+comment :REFERENCE IMPRIME
+---------------------------
+STOP 
+

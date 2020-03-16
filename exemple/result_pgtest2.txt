@@ -1,0 +1,99 @@
+
+..TEST.. 
+ 
+status : CONNECTION_OK
+Database : CGIFCH
+GetUser : readonly
+---------------------------
+Rcd.vdate    2018-07-02
+Rcd.vnumeric 1951.00
+Rcd.vtext    tata
+Rcd.vonchar  Y
+Rcd.vheure   17:34:01
+Rcd.vkey     1011
+Rcd.vbool    false
+Rcd.vchar    JP-Laroche
+---------------------------
+---------------------------
+Rcd.vdate    2018-07-02
+Rcd.vnumeric 1951.00
+Rcd.vtext    tata
+Rcd.vonchar  Y
+Rcd.vheure   17:34:01
+Rcd.vkey     1011
+Rcd.vbool    false
+Rcd.vchar    JP-Laroche
+---------------------------
+
+---------------------------
+Rcd.vkey     1011
+Rcd.vtext    tata
+---------------------------
+pause : 206 
+0
+pause : 228 
+0
+
+---------------------------
+Rcd.vdate    1951-10-12
+Rcd.vnumeric 5000.00
+Rcd.vtext    JPL
+Rcd.vonchar  C
+Rcd.vheure   11:10:01
+Rcd.vkey     101
+Rcd.vbool    true
+Rcd.vchar    jp-Laroche
+---------------------------
+pause : 267 
+0
+pause : 271 
+0
+ERR SQL :ERREUR:  la colonne « vtextx » de la relation « tabletype » n'existe pas
+LINE 1: UPDATE tabletype SET vtextx='totsxxxx' WHERE vkey = 10100  ;
+                             ^
+
+pause : 291 
+0
+ERR SQL :ERREUR:  la valeur d'une clé dupliquée rompt la contrainte unique « tabletype_pk »
+DETAIL:  La clé « (vkey)=(101) » existe déjà.
+
+pause : 303 
+0
+
+------read key ------------
+Rcd.vkey     101
+Rcd.vtext    totsxxxx
+Rcd.vkey     1011
+Rcd.vtext    tata
+---------------------------
+pause : 315 
+0
+---no rescpet order field--
+
+---------------------------
+Rcd.vdate    2018-07-02
+Rcd.vnumeric 1951.00
+Rcd.vtext    tata
+Rcd.vonchar  Y
+Rcd.vheure   17:34:01
+Rcd.vkey     1011
+Rcd.vbool    false
+Rcd.vchar    JP-Laroche
+---------------------------
+
+---------------------------
+Rcd.vdate    2018-07-02
+Rcd.vnumeric 1951.00
+Rcd.vtext    tata
+Rcd.vonchar  Y
+Rcd.vheure   17:34:01
+Rcd.vkey     1011
+Rcd.vbool    false
+Rcd.vchar    JP-Laroche
+---------------------------
+num col :0
+NOT FOUND :client 1012 non trouvé
+Proc sqlQuery : SELECT *  FROM tabletype WHERE vkey = 1012  ORDER BY vkey ;
+suite
+STOP 
+
