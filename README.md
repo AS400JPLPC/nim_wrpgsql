@@ -76,4 +76,5 @@ PS:
 
 > Je mettrais à disposition toutes les expliquations dès que les variables Date et Times seront incluses
 > je vais aussi regarder du coté des blod
+
 > la fonction **fmt** de nim est suffisante pour mettre en forme les ordres SQL dynamiquement  
