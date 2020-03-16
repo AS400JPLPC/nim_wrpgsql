@@ -28,7 +28,6 @@ when not declared(PGsql) :
       Db : PPGconn 
 
   type
-    SqlQuery* = distinct string
     LOCK* = object of IOError
     NOTFOUND* = object of IOError
     ERRSQL* = object of IOError
@@ -131,12 +130,12 @@ when not declared(PGsql) :
     result = pqconnectdb(conninfo)
     if pqStatus(result) != CONNECTION_OK: pgErrSQL(result) 
 
-  proc clearRslt*(ConnSql : PGsql) =
-    pqClear(ConnSql.Rslt)
-  
   proc closeDb*(db: PPGconn) =
     if db != nil:
       pqfinish(db)
+
+  proc clearRslt*(ConnSql : PGsql) =
+    pqClear(ConnSql.Rslt)
 
   proc GetDb*(db: PPGconn) : string =
     return $pqdb(db)
@@ -191,33 +190,11 @@ when not declared(PGsql) :
     if pqresultStatus(res) != PGRES_COMMAND_OK : pgErrSQL(db) 
     pqClear(res)
 
-  proc QuoteFmt(s: string): string =
-    ## DB quotes the string.
-    result = "'"
-    for c in items(s):
-      if c == '\'': add(result, "''")
-      else: add(result, c)
-    add(result, '\'')
 
-  proc sqlFormat(formatstr: SqlQuery, args: varargs[string]): string =
-    result = ""
-    var a = 0
-    if args.len > 0 and not string(formatstr).contains("?"):
-      pgErrSQL("""parameter substitution expects "?" """)
-    if args.len == 0:
-      return string(formatstr)
-    else:
-      for c in items(string(formatstr)):
-        if c == '?':
-          add(result, QuoteFmt(args[a]))
-          inc(a)
-        else:
-          add(result, c)
 
   proc isTable*(db: PPGconn; name: string) =
-    var rch : SqlQuery  = SqlQuery("SELECT count(*)  FROM pg_tables  WHERE  schemaname ='public' AND    tablename = ?;")
-    var cmd : string    = sqlFormat(rch,$name)
-    var count :int = parseInt($pqgetvalue(pqexec(db,cmd), 0, 0))
+    var requete : string= fmt"""SELECT count(*)  FROM pg_tables  WHERE  schemaname ='public' AND    tablename = '{name}';"""
+    var count :int = parseInt($pqgetvalue(pqexec(db,requete), 0, 0))
     if count  == 0 : 
       pgNotFound(fmt"no exsite Table : {name}")
 
@@ -428,11 +405,11 @@ when not declared(PGsql) :
     ConnSql.Cols = 0
     ConnSql.Rang = 0
     ConnSql.Field = 0
-    var ordreSql : string = query.replace(";"," ")
-    ordreSql = fmt"{ordreSql} LIMIT {limit};"
-    if contains(ordreSql, "select") or contains(ordreSql, "SELECT") :
-      if contains(ordreSql, "order by") or contains(ordreSql, "ORDER BY") :
-        ConnSql.Rslt = pqexec(db,ordreSql)
+    var requete : string = query.replace(";"," ")
+    requete = fmt"{requete} LIMIT {limit};"
+    if contains(requete, "select") or contains(requete, "SELECT") :
+      if contains(requete, "order by") or contains(requete, "ORDER BY") :
+        ConnSql.Rslt = pqexec(db,requete)
 
         if pqresultStatus(ConnSql.Rslt) != PGRES_TUPLES_OK or pqresultStatus(ConnSql.Rslt) == PGRES_FATAL_ERROR:
           pgErrSQL(db)
@@ -442,15 +419,15 @@ when not declared(PGsql) :
         case operation 
           of "SELECT 0":
             pqClear(ConnSql.Rslt)
-            pgNotFound(fmt"Proc sqlQuery : {ordreSql}")
+            pgNotFound(fmt"Proc sqlQuery : {requete}")
           else :
             ConnSql.Rows = pqntuples(ConnSql.Rslt)
             ConnSql.Cols = pqnfields(ConnSql.Rslt)
             ConnSql.Rang = (pqntuples(ConnSql.Rslt) - 1)
             ConnSql.Field = (pqnfields(ConnSql.Rslt) - 1)
 
-      else : pgErrSQL(fmt"Proc sqlPage requires ORDER BY : {ordreSql}")
-    else : pgErrSQL(fmt"Proc sqlPage Only SELECT: {ordreSql}")
+      else : pgErrSQL(fmt"Proc sqlPage requires ORDER BY : {requete}")
+    else : pgErrSQL(fmt"Proc sqlPage Only SELECT: {requete}")
 
 
   proc sqlFirst*(db: PPGconn; ConnSql : Pgsql; query ,cursor :string )=
@@ -459,21 +436,21 @@ when not declared(PGsql) :
     ConnSql.Rang = 0
     ConnSql.Field = 0
 
-    var ordreSql : string = fmt"DECLARE {cursor} CURSOR FOR {query}"
-    ConnSql.Rslt = pqexec(db,ordreSql)
+    var requete : string = fmt"DECLARE {cursor} CURSOR FOR {query}"
+    ConnSql.Rslt = pqexec(db,requete)
     if pqresultStatus(ConnSql.Rslt) != PGRES_COMMAND_OK  or pqresultStatus(ConnSql.Rslt) == PGRES_FATAL_ERROR :
       pgErrSQL(db)
 
-    ordreSQL = fmt"FETCH FIRST in {cursor};" 
-    ConnSql.Rslt = pqexec(db,ordreSql)
+    requete = fmt"FETCH FIRST in {cursor};" 
+    ConnSql.Rslt = pqexec(db,requete)
 
     case pqresultStatus(ConnSql.Rslt)
       of PGRES_TUPLES_OK :
         let operation : string  =fmt"{pqcmdStatus(ConnSql.Rslt)}"
         if operation == "FETCH 0" :
           ConnSql.Eof  =true
-          ordreSQL = fmt"close  {cursor};"
-          discard pqexec(db,ordreSql)
+          requete = fmt"close  {cursor};"
+          discard pqexec(db,requete)
           pgNotFound(fmt"Proc sqlFirst : {query} cursor : {cursor}")
         else :
           ConnSql.Eof  =false
@@ -492,21 +469,21 @@ when not declared(PGsql) :
     ConnSql.Rang = 0
     ConnSql.Field = 0
 
-    var ordreSql : string = fmt"DECLARE {cursor} CURSOR FOR {query}"
-    ConnSql.Rslt = pqexec(db,ordreSql)
+    var requete : string = fmt"DECLARE {cursor} CURSOR FOR {query}"
+    ConnSql.Rslt = pqexec(db,requete)
     if pqresultStatus(ConnSql.Rslt) != PGRES_COMMAND_OK  or pqresultStatus(ConnSql.Rslt) == PGRES_FATAL_ERROR:
       pgErrSQL(db)
 
-    ordreSQL = fmt"FETCH LAST in {cursor};" 
-    ConnSql.Rslt = pqexec(db,ordreSql)
+    requete = fmt"FETCH LAST in {cursor};" 
+    ConnSql.Rslt = pqexec(db,requete)
 
     case pqresultStatus(ConnSql.Rslt)
       of PGRES_TUPLES_OK :
         let operation : string  =fmt"{pqcmdStatus(ConnSql.Rslt)}"
         if operation == "FETCH 0" :
           ConnSql.Eof  =true
-          ordreSQL = fmt"close  {cursor};"
-          discard pqexec(db,ordreSql)
+          requete = fmt"close  {cursor};"
+          discard pqexec(db,requete)
           pgNotFound(fmt"Proc sqlLast : {query} cursor : {cursor}")
         else :
           ConnSql.Eof  =false
@@ -525,16 +502,16 @@ when not declared(PGsql) :
     ConnSql.Rang = 0
     ConnSql.Field = 0
 
-    var ordreSql : string = fmt"FETCH NEXT in  {cursor};" 
-    ConnSql.Rslt = pqexec(db,ordreSql)
+    var requete : string = fmt"FETCH NEXT in  {cursor};" 
+    ConnSql.Rslt = pqexec(db,requete)
 
     case pqresultStatus(ConnSql.Rslt)
       of PGRES_TUPLES_OK :
         let operation : string  =fmt"{pqcmdStatus(ConnSql.Rslt)}"
         if operation == "FETCH 0" :
           ConnSql.Eof  =true
-          ordreSQL = fmt"close  {cursor};"
-          discard pqexec(db,ordreSql)
+          requete = fmt"close  {cursor};"
+          discard pqexec(db,requete)
         else :
           ConnSql.Eof  =false
           ConnSql.Rows = pqntuples(ConnSql.Rslt)
@@ -551,16 +528,16 @@ when not declared(PGsql) :
     ConnSql.Rang = 0
     ConnSql.Field = 0
 
-    var ordreSql : string = fmt"FETCH PRIOR in  {cursor};" 
-    ConnSql.Rslt = pqexec(db,ordreSql)
+    var requete : string = fmt"FETCH PRIOR in  {cursor};" 
+    ConnSql.Rslt = pqexec(db,requete)
 
     case pqresultStatus(ConnSql.Rslt)
       of PGRES_TUPLES_OK :
         let operation : string  =fmt"{pqcmdStatus(ConnSql.Rslt)}"
         if operation == "FETCH 0" :
           ConnSql.Eof  =true
-          ordreSQL = fmt"close  {cursor};"
-          discard pqexec(db,ordreSql)
+          requete = fmt"close  {cursor};"
+          discard pqexec(db,requete)
         else :
           ConnSql.Eof  =false
           ConnSql.Rows = pqntuples(ConnSql.Rslt)
@@ -578,9 +555,9 @@ when not declared(PGsql) :
     ConnSql.Rang = 0
     ConnSql.Field = 0
     if contains(query, "select") or contains(query, "SELECT") :
-      var ordreSql : string = query.replace(";"," ")
-      ordreSql = fmt"{ordreSql} FOR UPDATE NOWAIT;"
-      ConnSql.Rslt = pqexec(db,ordreSql)
+      var requete : string = query.replace(";"," ")
+      requete = fmt"{requete} FOR UPDATE NOWAIT;"
+      ConnSql.Rslt = pqexec(db,requete)
       if pqresultStatus(ConnSql.Rslt) != PGRES_TUPLES_OK or pqresultStatus(ConnSql.Rslt) == PGRES_FATAL_ERROR:
         pgErrSQL(db)
 
@@ -593,7 +570,7 @@ when not declared(PGsql) :
           ConnSql.Field = (pqnfields(ConnSql.Rslt) - 1)
         of "SELECT 0" :
           pqClear(ConnSql.Rslt)
-          pgNotFound(fmt"Proc sqlLock {ordreSql}")
+          pgNotFound(fmt"Proc sqlLock {requete}")
         else :
           pqClear(ConnSql.Rslt)
           pgErrSQL(db)
@@ -622,13 +599,13 @@ when not declared(PGsql) :
     var requete:string
     var Connx = new(PGsql)
 
-    requete =sqlFormat(SqlQuery("""SELECT
+    requete =fmt"""SELECT
     cl.column_name,cl.ORDINAL_POSITION,cl.DATA_TYPE,cl.CHARACTER_MAXIMUM_LENGTH,cl.NUMERIC_PRECISION,cl.NUMERIC_SCALE 
     ,(select pg_catalog.col_description(oid,cl.ordinal_position::int) from pg_catalog.pg_class c where c.relname=cl.table_name) as column_comment
     FROM information_schema.columns cl  
-    WHERE cl.table_catalog=?  and cl.table_name=? order by 2 ;""") ,GetDb(db) ,table)
+    WHERE cl.table_catalog='{GetDb(db)}' and cl.table_name='{table}' order by 2 ;"""
+    echo requete
     Connx.Rslt = pqexec(db,requete )
-
     let operation : string  =fmt"{pqcmdStatus(Connx.Rslt)}"
     case operation 
       of "SELECT 0" :
@@ -747,7 +724,6 @@ when not declared(PGsql) :
 
 proc `<<`*(narg :var string; v : string )= 
   narg = v
-
 
 proc `<<`*(narg :var Dcml  ; v : string ) = 
   narg := v
