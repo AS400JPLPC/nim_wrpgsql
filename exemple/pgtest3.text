@@ -1,0 +1,119 @@
+..TEST.. 
+ 
+status : CONNECTION_OK
+Database : dvdrental
+GetUser : readonly
+---------------------------
+name :actor_id
+tableName :actor
+typ :(kind: dbInt, name: "int4")
+position :1
+nullable :false
+maxchar :0
+precision :32
+scale :0
+comment :
+---------------------------
+name :first_name
+tableName :actor
+typ :(kind: dbVarchar, name: "varchar")
+position :2
+nullable :false
+maxchar :45
+precision :0
+scale :0
+comment :
+---------------------------
+name :last_name
+tableName :actor
+typ :(kind: dbVarchar, name: "varchar")
+position :3
+nullable :false
+maxchar :45
+precision :0
+scale :0
+comment :
+---------------------------
+name :last_update
+tableName :actor
+typ :(kind: dbDate, name: "date")
+position :4
+nullable :false
+maxchar :0
+precision :0
+scale :0
+comment :
+---------------------------
+---------------------------
+ Id : 1  first_name : Penelope  last_name : Guiness  last_update : 2013-05-26
+---------------------------
+ Id : 2  first_name : Nick  last_name : Wahlberg  last_update : 2013-05-26
+---------------------------
+ Id : 3  first_name : Ed  last_name : Chase  last_update : 2013-05-26
+---------------------------
+ Id : 4  first_name : Jennifer  last_name : Davis  last_update : 2013-05-26
+---------------------------
+ Id : 5  first_name : Johnny  last_name : Lollobrigida  last_update : 2013-05-26
+---------------------------
+ Id : 6  first_name : Bette  last_name : Nicholson  last_update : 2013-05-26
+---------------------------
+ Id : 7  first_name : Grace  last_name : Mostel  last_update : 2013-05-26
+---------------------------
+ Id : 8  first_name : Matthew  last_name : Johansson  last_update : 2013-05-26
+---------------------------
+ Id : 9  first_name : Joe  last_name : Swank  last_update : 2013-05-26
+---------------------------
+ Id : 10  first_name : Christian  last_name : Gable  last_update : 2013-05-26
+---------------------------
+name      :category
+tableName :sales_by_film_category
+typ       :(kind: dbVarchar, name: "varchar")
+position  :1
+nullable  :true
+maxchar   :25
+precision :0
+scale     :0
+comment   :
+name      :total_sales
+tableName :sales_by_film_category
+typ       :(kind: dbDecimal, name: "numeric")
+position  :2
+nullable  :true
+maxchar   :0
+precision :0
+scale     :0
+comment   :
+---------------------------------------
+Category                 |        Somme
+---------------------------------------
+Action                   |      3951.84 
+---------------------------------------
+Animation                |      4245.31 
+---------------------------------------
+Children                 |      3309.39 
+---------------------------------------
+Classics                 |      3353.38 
+---------------------------------------
+Comedy                   |      4002.48 
+---------------------------------------
+Documentary              |      3749.65 
+---------------------------------------
+Drama                    |      4118.46 
+---------------------------------------
+Family                   |      3830.15 
+---------------------------------------
+Foreign                  |      3934.47 
+---------------------------------------
+Games                    |      3922.18 
+---------------------------------------
+Horror                   |      3401.27 
+---------------------------------------
+Music                    |      3071.52 
+---------------------------------------
+New                      |      3966.38 
+---------------------------------------
+Sci-Fi                   |      4336.01 
+---------------------------------------
+Sports                   |      4892.19 
+---------------------------------------
+Travel                   |      3227.36 

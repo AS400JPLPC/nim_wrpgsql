@@ -1,8 +1,12 @@
+when not declared(times) :
+  import times
 when not declared(os) :
   from os import getenv
   from os import sleep
 when not declared(strutils) :
   import strutils
+when not declared(parseutils) :
+  import parseutils
 when not declared(postgres) :
   import postgres 
 when not declared(strformat) :
@@ -11,7 +15,8 @@ when not declared(dcml) :
   import dcml
 when not declared(zoned) :
   import zoned
-
+when not declared(date) :
+  import date
 
 when not declared(PGsql) :
   type 
@@ -80,10 +85,11 @@ when not declared(PGsql) :
       kind*: DbTypeKind           ## the kind of the described type
       name*: string               ## the name of the type
 
-    DbColumn* = object   ## information about a database column
-      name*: string      ## name of the column
-      tableName*: string ## name of the table the column belongs to (optional)
+    DbColumn* = object    ## information about a database column
+      name*: string       ## name of the column
+      tableName*: string  ## name of the table the column belongs to (optional)
       typ*: DbType        ## type of the column
+      nullable*    : bool   ## Null position true accept null
       position*  : int    ## ORDINAL_POSITION
       maxchar*   : int    ## CHARACTER_MAXIMUM_LENGTH
       precision* : int    ## NUMERIC_PRECISION
@@ -170,8 +176,7 @@ when not declared(PGsql) :
 
   proc Rollback*(db: PPGconn) =
     var res:PPGresult = pqexec(db,"ROLLBACK;") 
-    if pqresultStatus(res) != PGRES_COMMAND_OK : pgErrSQL(db) 
-    pqClear(res)
+    if pqresultStatus(res) != PGRES_COMMAND_OK : pgErrSQL(db)
 
   proc Savepoint*(db: PPGconn) =
     var res:PPGresult = pqexec(db,"SAVEPOINT full_savepoint;") 
@@ -600,16 +605,16 @@ when not declared(PGsql) :
     var Connx = new(PGsql)
 
     requete =fmt"""SELECT
-    cl.column_name,cl.ORDINAL_POSITION,cl.DATA_TYPE,cl.CHARACTER_MAXIMUM_LENGTH,cl.NUMERIC_PRECISION,cl.NUMERIC_SCALE 
+    cl.column_name,cl.ORDINAL_POSITION,cl.data_TYPE,cl.is_nullable,cl.CHARACTER_MAXIMUM_LENGTH,cl.NUMERIC_PRECISION,cl.NUMERIC_SCALE 
     ,(select pg_catalog.col_description(oid,cl.ordinal_position::int) from pg_catalog.pg_class c where c.relname=cl.table_name) as column_comment
     FROM information_schema.columns cl  
     WHERE cl.table_catalog='{GetDb(db)}' and cl.table_name='{table}' order by 2 ;"""
-    echo requete
+
     Connx.Rslt = pqexec(db,requete )
     let operation : string  =fmt"{pqcmdStatus(Connx.Rslt)}"
     case operation 
       of "SELECT 0" :
-        pgErrSQL(fmt"Proc sqlColInfo Error occurs : {table}")
+        pgErrSQL(db)
       else : discard
 
     Connx.Rows = pqntuples(Connx.Rslt)
@@ -632,22 +637,27 @@ when not declared(PGsql) :
           of 2: columns[c].typ = db.sqlTypeInfo(columns[c].tableName,columns[c].name)
 
           of 3: 
+              if  $Connx.sqlValue(r, i) == "YES" :
+                columns[c].nullable= true
+              else : columns[c].nullable= false
+
+          of 4: 
               if Connx.sqlisNul(r, i) :
                 columns[c].maxchar= 0
               else : columns[c].maxchar   = parseInt($Connx.sqlValue(r, i))
 
-          of 4: 
+          of 5: 
               if Connx.sqlisNul(r, i) :
                 columns[c].precision = 0
               else : columns[c].precision = parseInt($Connx.sqlValue(r, i))
 
-          of 5: 
+          of 6: 
               if Connx.sqlisNul(r, i) :
                 columns[c].scale = 0
               else : 
                 columns[c].scale     = parseInt($Connx.sqlValue(r, i))
 
-          of 6:
+          of 7:
               columns[c].comment   = Connx.sqlValue(r, i)
           
           else : discard
@@ -676,7 +686,7 @@ when not declared(PGsql) :
         if ch != '\"': add(table, ch)
 
       requete =fmt"""SELECT
-      cl.column_name,cl.ORDINAL_POSITION,cl.DATA_TYPE,cl.CHARACTER_MAXIMUM_LENGTH,cl.NUMERIC_PRECISION,cl.NUMERIC_SCALE 
+      cl.column_name,cl.ORDINAL_POSITION,cl.data_TYPE,cl.is_nullable,cl.CHARACTER_MAXIMUM_LENGTH,cl.NUMERIC_PRECISION,cl.NUMERIC_SCALE 
       ,(select pg_catalog.col_description(oid,cl.ordinal_position::int) 
             from pg_catalog.pg_class c where c.relname=cl.table_name) as column_comment
       FROM information_schema.columns cl  
@@ -697,22 +707,27 @@ when not declared(PGsql) :
               columns[c].typ = db.sqlTypeInfo(columns[c].tableName,columns[c].name)
 
           of 3: 
+              if  $Connx.sqlValue(r, i) == "YES" :
+                columns[c].nullable= true
+              else : columns[c].nullable= false
+
+          of 4: 
               if Connx.sqlisNul(r, i) :
                 columns[c].maxchar= 0
               else : columns[c].maxchar   = parseInt($Connx.sqlValue(r, i))
 
-          of 4: 
+          of 5: 
               if Connx.sqlisNul(r, i) :
                 columns[c].precision = 0
               else : columns[c].precision = parseInt($Connx.sqlValue(r, i))
 
-          of 5: 
+          of 6: 
               if Connx.sqlisNul(r, i) :
                 columns[c].scale = 0
               else : 
                 columns[c].scale     = parseInt($Connx.sqlValue(r, i))
 
-          of 6:
+          of 7:
               columns[c].comment   = Connx.sqlValue(r, i)
 
           else : discard
@@ -720,34 +735,75 @@ when not declared(PGsql) :
 
 
 
-## return value from var-sql to var-pgm
+  ## return value from var-sql to var-pgm
+  
+  proc fld*(narg :var string;   ConnSql : PGsql; nRang, nField : int32)=
+    narg = ConnSql.sqlValue(nRang, nField)
+  
+  proc fld*(narg :var Dcml  ;  ConnSql : PGsql; nRang, nField : int32)=
+    narg := ConnSql.sqlValue(nRang, nField)
+  
+  proc fld*(narg :var Zoned ;  ConnSql : PGsql; nRang, nField : int32)=
+    narg := ConnSql.sqlValue(nRang, nField) 
+  
+  proc fld*(narg :var bool  ;  ConnSql : PGsql; nRang, nField : int32)=
+    var v: string = ConnSql.sqlValue(nRang, nField) 
+    case v
+      of "f" , "false" ,"n","no","off","0" : 
+        narg =false 
+      of "t" , "true","y","yes","on","1" :
+        narg = true
+      else : narg = false
+  
+  proc fld*(narg :var int; ConnSql : PGsql; nRang, nField : int32)=
+    var v: string = ConnSql.sqlValue(nRang, nField)
+    if v == "" : 
+      narg = 0
+    else :
+      narg = parseInt(v)
+  
+  proc fld*(narg :var float; ConnSql : PGsql; nRang, nField : int32)=
+    var v: string = ConnSql.sqlValue(nRang, nField)
+    if v == "" : 
+      narg = 0.0
+    else :
+      narg = parseFloat(v)
+  
+  proc fld*(narg : var Date; ConnSql : PGsql; nRang, nField : int32)=
+    var v: string = ConnSql.sqlValue(nRang, nField)
+    if v == ""  : 
+      narg.data = parse("0001-01-01", "yyyy-MM-dd")
+    else :
+      narg.data = parse(v, "yyyy-MM-dd")
 
-proc `<<`*(narg :var string; v : string )= 
-  narg = v
+  proc fld*(narg : var Temps; ConnSql : PGsql; nRang, nField : int32)=
+    var v: string = ConnSql.sqlValue(nRang, nField)
+    if v == ""  : 
+      narg.data = parse("00:00:00", "HH:mm:ss")
+    else :
+      narg.data = parse(v, "HH:mm:ss")
+  
+  
+  ## to SQL Dcml and Zoned
+  proc sql*(narg :var Dcml ):string = 
+    if narg == 0 and narg.isBool == true : return "null"
+    else :
+      return $narg
 
-proc `<<`*(narg :var Dcml  ; v : string ) = 
-  narg := v
+  proc sql*(narg :var Zoned ):string = 
+    if narg == "" and narg.isBool == true : return "null"
+    else :
+      var s : string = $narg
+      return fmt"'{s}'"
 
-proc `<<`*(narg :var Zoned ; v : string ) = 
-  narg := v
-
-proc `<<`*(narg :var bool  ; v : string ) = 
-  case v
-    of "f" , "false" ,"n","no","off","0" : 
-      narg =false 
-    of "t" , "true","y","yes","on","1" :
-      narg = true
-    else : narg = false
-
-proc `<<`*(narg :var int; v : string )=
-  if v == "" : 
-    narg = 0
-  else :
-    narg = parseInt(v)
-
-proc `<<`*(narg :var float; v : string )=
-  if v == "" : 
-    narg = 0.0
-  else :
-    narg = parseFloat(v)
-
+  ## to SQL Date and Time
+  proc sql*(a: Date): string =
+    if a.data.format("yyyy-MM-dd") == "0001-01-01" and a.isBool == true : return "null"
+    else :
+      var d : string = a.data.format("yyyy-MM-dd")
+      return fmt"'{d}'"
+  proc sql*(a: Temps): string =
+    if a.data.format("HH:mm:ss") == "00:00:00" and a.isBool == true : return "null"
+    else :
+      var h : string = a.data.format("HH:mm:ss")
+      return fmt"'{h}'"

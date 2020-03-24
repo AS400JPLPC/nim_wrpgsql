@@ -1,9 +1,11 @@
 import wrpgsql
 import dcml
 import zoned
+import date
 
-import strformat
 
+when not declared(strformat) :
+  import strformat
 
 # specifique for test
 import terminal
@@ -40,39 +42,36 @@ var ConnProd* = new(PGsql)
 
 type
   tabletype* = object of RootObj
-    vdate: string
+    vdate: Date
     vnumeric: Dcml
     vtext: string
-    vonchar : string
-    vheure : string
+    vonchar : Zoned
+    vheure : Temps
     vkey : Dcml
     vbool : bool
     vchar : Zoned
 
 proc declare_Tabletype() :tabletype =
   var Record : tabletype
+  Record.vdate = newDate()
   Record.vnumeric = newDcml(8,2)
-  Record.vkey = newDcml(7,0)
+  Record.vtext = ""
+  Record.vonchar = newZoned(1)
+  Record.vheure = newTemps()
+  Record.vkey = newDcml(7,0,false)
+  Record.vbool = false
   Record.vchar = newZoned(10)
 
-  Record.vdate = ""
-  Record.vnumeric := 0
-  Record.vtext = ""
-  Record.vonchar = ""
-  Record.vheure = ""
-  Record.vkey := 0
-  Record.vbool = false
-  Record.vchar := ""
   return Record
 
 var Rcd : tabletype = declare_Tabletype()
 
 proc clearRcd() =
-  Rcd.vdate = ""
+  Rcd.vdate := ""
   Rcd.vnumeric := ""
   Rcd.vtext = ""
-  Rcd.vonchar = ""
-  Rcd.vheure = ""
+  Rcd.vonchar := ""
+  Rcd.vheure := ""
   Rcd.vkey := 0
   Rcd.vbool = false
   Rcd.vchar := ""
@@ -84,31 +83,31 @@ proc  unpack_Rcd(ConnSql : PGsql; n : var  tabletype ; r : int32 ) =
       case ConnSql.sqlName(f)
 
       of "vdate" :
-                  Rcd.vdate<<ConnSql.sqlValue(r, f)
+                  Rcd.vdate.fld(ConnSql,r, f)
       of "vnumeric" :
-                  Rcd.vnumeric<<ConnSql.sqlValue(r, f)
+                  Rcd.vnumeric.fld(ConnSql,r, f)
       of "vtext" :
-                  Rcd.vtext<<ConnSql.sqlValue(r, f)
+                  Rcd.vtext.fld(ConnSql,r, f)
       of "vonchar" :
-                  Rcd.vonchar<<ConnSql.sqlValue(r, f)
+                  Rcd.vonchar.fld(ConnSql,r, f)
       of "vheure" :
-                  Rcd.vheure<<ConnSql.sqlValue(r, f)
+                  Rcd.vheure.fld(ConnSql,r, f)
       of "vkey" :
-                  Rcd.vkey<<ConnSql.sqlValue(r, f)
+                  Rcd.vkey.fld(ConnSql,r, f)
       of "vbool" :
-                  Rcd.vbool<<ConnSql.sqlValue(r, f)
+                  Rcd.vbool.fld(ConnSql,r, f)
       of "vchar" :
-                  Rcd.vchar<<ConnSql.sqlValue(r, f)
+                  Rcd.vchar.fld(ConnSql,r, f)
 
 
 
 
 try :
-  Db = Connect("localhost","5432","CGIFCH","readonly","read","pgtest-Read")
+  Db = Connect("localhost","5432","CGIFCH","readonly","read","pgtest2-Read")
   echo "status : ",Db.status
   echo "Database : ",GetDb(Db)
   echo "GetUser : ", GetUser(Db)
-  DbProd = Connect("localhost","5432","CGIFCH","userpgm","usrpgm","pgtest-USE")
+  DbProd = Connect("localhost","5432","CGIFCH","userpgm","usrpgm","pgtest2-USE")
 
 #[
 CREATE TABLE public.tabletype
@@ -165,7 +164,7 @@ COMMENT ON COLUMN public.tabletype.vchar
     Db.isTable("tabletype")
   except NOTFOUND :
     echo "NOT FOUND :" , getCurrentExceptionMsg()
-    quitLine(169)
+    quitLine(167)
   
   requete =fmt"SELECT * FROM tabletype  ORDER BY vkey ;" 
   Db.sqlQuery(Conn, requete )
@@ -196,13 +195,13 @@ COMMENT ON COLUMN public.tabletype.vchar
   echo ""
   echo "---------------------------"
   for r in 0 .. Conn.Rang :
-    Rcd.vkey<<Conn.sqlValue(r, 0)
-    Rcd.vtext<<Conn.sqlValue(r, 1)
+    Rcd.vkey.fld(Conn,r, 0)
+    Rcd.vtext.fld(Conn,r, 1)
   echo "Rcd.vkey     ",Rcd.vkey
   echo "Rcd.vtext    ",Rcd.vtext
   echo "---------------------------"
   
-  echo "pause : 206 "
+  echo "pause : 204 "
   echo getch()
 
 
@@ -219,12 +218,17 @@ COMMENT ON COLUMN public.tabletype.vchar
       DbProd.sqlQuery(ConnProd, requete )
       DbProd.Commit
       DbProd.Begin
+
+      Rcd.vdate:="2020-10-20"
+      Rcd.vnumeric:=5000
+      #Rcd.vnumeric:=0
       requete =fmt"""INSERT INTO tabletype
       (vdate, vnumeric, vtext, vonchar, vheure, vkey, vbool, vchar)
-      VALUES('1951-10-12',5000.00, 'JPL', 'C', '11:10:01', 101, true, 'jp-Laroche');""" 
+      VALUES({Rcd.vdate.sql()},{Rcd.vnumeric.sql()}, 'JPL', 'C', '11:10:01', 101, true, 'jp-Laroche');""" 
+
       DbProd.sqlQuery(ConnProd, requete) 
       
-      echo "pause : 228 "
+      echo "pause : 231"
       echo getch()
 
       DbProd.Commit
@@ -263,7 +267,7 @@ COMMENT ON COLUMN public.tabletype.vchar
     echo "---------------------------"
 
 
-  echo "pause : 267 "
+  echo "pause : 270 "
   echo getch()
 
   DbProd.Begin
@@ -273,12 +277,10 @@ COMMENT ON COLUMN public.tabletype.vchar
   requete =fmt"UPDATE tabletype SET vtext='totsxxxx', vbool = {Rcd.vbool}, vchar = null WHERE vkey = 101  ;" 
   DbProd.sqlQuery(ConnProd, requete )
 
-  echo "pause : 271 "
+  echo "pause : 280 "
   echo getch()
   
   DbProd.Commit
-  requete =fmt"SELECT vkey,vtext  FROM tabletype   ORDER BY vkey ;" 
-  Db.sqlQuery(Conn, requete )
 
   try:
     requete =fmt"UPDATE tabletype SET vtextx='totsxxxx' WHERE vkey = 10100  ;"
@@ -287,31 +289,33 @@ COMMENT ON COLUMN public.tabletype.vchar
     echo "NOT FOUND :" , getCurrentExceptionMsg()
   except ERRSQL :
     echo "ERR SQL :" , getCurrentExceptionMsg()
-  echo "pause : 291 "
+  echo "pause : 292 "
   echo getch()
 
   try:
     requete =fmt"""INSERT INTO tabletype
     (vdate, vnumeric, vtext, vonchar, vheure, vkey, vbool, vchar)
-    VALUES('1951-10-12',5000.00, 'JPL', 'C', '11:10:01', 101, true, 'jp-Laroche');"""
+    VALUES('1951-10-12',5000, 'JPL', 'C', '11:10:01', 101, true, 'jp-Laroche');"""
     DbProd.sqlQuery(ConnProd, requete )
   except NOTFOUND :
     echo "NOT FOUND :" , getCurrentExceptionMsg()
   except ERRSQL :
     echo "ERR SQL :" , getCurrentExceptionMsg()
-  echo "pause : 303 "
+  echo "pause : 304 "
   echo getch()
 
+  requete =fmt"SELECT vkey,vtext  FROM tabletype   ORDER BY vkey ;" 
+  Db.sqlQuery(Conn, requete )
   echo ""
   echo "------read key ------------"
   for r in 0 .. Conn.Rang :
-    Rcd.vkey<<Conn.sqlValue(r, 0)
-    Rcd.vtext<<Conn.sqlValue(r, 1)
+    Rcd.vkey.fld(Conn,r, 0)
+    Rcd.vtext.fld(Conn,r, 1)
     echo "Rcd.vkey     ",Rcd.vkey
     echo "Rcd.vtext    ",Rcd.vtext
   echo "---------------------------"
 
-  echo "pause : 315 "
+  echo "pause : 318 "
   echo getch()
 
   echo "---no rescpet order field--"
@@ -344,15 +348,30 @@ COMMENT ON COLUMN public.tabletype.vchar
   finally:
     echo "suite"
 
-  var nd: Dcml
+  echo Rcd.vdate.sql()
+  echo Rcd.vheure.sql()
+  requete =fmt"SELECT *  FROM tabletype WHERE vkey = 101  ORDER BY vkey ;" 
+  Db.sqlQuery(Conn, requete )
+  for r in 0 .. Conn.Rang :
+    unpack_Rcd(Conn,Rcd,r) 
+  echo ""
+  echo ""
+  echo fmt"SELECT *  FROM tabletype WHERE vkey = 101  ORDER BY vkey ;" 
+  echo ""
+  echo "---------------------------"
+  echo "Rcd.vdate    ",Rcd.vdate.sql()
+  echo "Rcd.vnumeric ",Rcd.vnumeric.sql()
+  echo "Rcd.vtext    ",Rcd.vtext
+  echo "Rcd.vonchar  ",Rcd.vonchar.sql()
+  echo "Rcd.vheure   ",Rcd.vheure.sql()
+  echo "Rcd.vkey     ",Rcd.vkey.sql()
+  echo "Rcd.vbool    ",Rcd.vbool
+  echo "Rcd.vchar    ",Rcd.vchar.sql()
+  echo "---------------------------"
 
-  nd = newDcml(5,2)
-
-  nd := "10"
-  nd += Rcd.vnumeric
-  echo nd
-  
+  echo "Rcd.vnumeric ",Rcd.vnumeric.isBool()
   quitClean()
+
 
 except STOP :
   echo "STOP " , getCurrentExceptionMsg()

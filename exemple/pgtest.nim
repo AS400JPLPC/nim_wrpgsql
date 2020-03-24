@@ -139,6 +139,7 @@ try :
     echo "tableName :",Columns[i].tableName
     echo "typ :",Columns[i].typ
     echo "position :",Columns[i].position
+    echo "nullable :",Columns[i].nullable
     echo "maxchar :",Columns[i].maxchar
     echo "precision :",Columns[i].precision
     echo "scale :",Columns[i].scale
@@ -174,6 +175,7 @@ try :
     echo "tableName :",Columns[i].tableName
     echo "typ :",Columns[i].typ
     echo "position :",Columns[i].position
+    echo "nullable :",Columns[i].nullable
     echo "maxchar :",Columns[i].maxchar
     echo "precision :",Columns[i].precision
     echo "scale :",Columns[i].scale
@@ -191,6 +193,7 @@ try :
     echo "tableName :",Columns[i].tableName
     echo "typ :",Columns[i].typ
     echo "position :",Columns[i].position
+    echo "nullable :",Columns[i].nullable
     echo "maxchar :",Columns[i].maxchar
     echo "precision :",Columns[i].precision
     echo "scale :",Columns[i].scale
@@ -206,6 +209,7 @@ try :
     echo "tableName :",Columns[i].tableName
     echo "typ :",Columns[i].typ
     echo "position :",Columns[i].position
+    echo "nullable :",Columns[i].nullable
     echo "maxchar :",Columns[i].maxchar
     echo "precision :",Columns[i].precision
     echo "scale :",Columns[i].scale

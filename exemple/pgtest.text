@@ -1,4 +1,4 @@
-[..TEST.. 
+..TEST.. 
  
 status : CONNECTION_OK
 Database : CGIFCH
@@ -10,7 +10,7 @@ GetUser : readonly
  setFirst test eof etc...
 1
 8
-Name :vdate  value : 1951-10-12
+Name :vdate  value : 2020-10-20
 Name :vnumeric  value : 5000.00
 Name :vtext  value : totsxxxx
 Name :vonchar  value : C
@@ -19,11 +19,11 @@ Name :vkey  value : 101
 Name :vbool  value : t
 Name :vchar  value : 
 --
-Name :vdate  value : 2018-07-02
-Name :vnumeric  value : 1951.00
+Name :vdate  value : 1951-10-12
+Name :vnumeric  value : 15.21
 Name :vtext  value : tata
 Name :vonchar  value : Y
-Name :vheure  value : 17:34:01
+Name :vheure  value : 00:00:00
 Name :vkey  value : 1011
 Name :vbool  value : f
 Name :vchar  value : JP-Laroche
@@ -32,16 +32,16 @@ pause 78 :0
  Back test eof etc...
 1
 8
-Name :vdate  value : 2018-07-02
-Name :vnumeric  value : 1951.00
+Name :vdate  value : 1951-10-12
+Name :vnumeric  value : 15.21
 Name :vtext  value : tata
 Name :vonchar  value : Y
-Name :vheure  value : 17:34:01
+Name :vheure  value : 00:00:00
 Name :vkey  value : 1011
 Name :vbool  value : f
 Name :vchar  value : JP-Laroche
 --
-Name :vdate  value : 1951-10-12
+Name :vdate  value : 2020-10-20
 Name :vnumeric  value : 5000.00
 Name :vtext  value : totsxxxx
 Name :vonchar  value : C
@@ -77,6 +77,7 @@ name :vdate
 tableName :tabletype
 typ :(kind: dbDate, name: "date")
 position :0
+nullable :true
 maxchar :0
 precision :0
 scale :0
@@ -86,6 +87,7 @@ name :vnumeric
 tableName :tabletype
 typ :(kind: dbDecimal, name: "numeric")
 position :1
+nullable :true
 maxchar :0
 precision :8
 scale :2
@@ -95,6 +97,7 @@ name :vtext
 tableName :tabletype
 typ :(kind: dbVarchar, name: "text")
 position :2
+nullable :true
 maxchar :0
 precision :0
 scale :0
@@ -104,6 +107,7 @@ name :vonchar
 tableName :tabletype
 typ :(kind: dbFixedChar, name: "bpchar")
 position :3
+nullable :true
 maxchar :1
 precision :0
 scale :0
@@ -113,6 +117,7 @@ name :vheure
 tableName :tabletype
 typ :(kind: dbTime, name: "time")
 position :4
+nullable :true
 maxchar :0
 precision :0
 scale :0
@@ -122,6 +127,7 @@ name :vkey
 tableName :tabletype
 typ :(kind: dbDecimal, name: "numeric")
 position :5
+nullable :false
 maxchar :0
 precision :7
 scale :0
@@ -131,6 +137,7 @@ name :vbool
 tableName :tabletype
 typ :(kind: dbBool, name: "bool")
 position :6
+nullable :false
 maxchar :0
 precision :0
 scale :0
@@ -140,16 +147,17 @@ name :vchar
 tableName :tabletype
 typ :(kind: dbFixedChar, name: "bpchar")
 position :7
+nullable :true
 maxchar :10
 precision :0
 scale :0
 comment :field char (10)
 ---------------------------
-Name :vdate  value : 2018-07-02   --- Type : (kind: dbDate, name: "date")
-Name :vnumeric  value : 1951.00   --- Type : (kind: dbDecimal, name: "numeric")
+Name :vdate  value : 1951-10-12   --- Type : (kind: dbDate, name: "date")
+Name :vnumeric  value : 15.21   --- Type : (kind: dbDecimal, name: "numeric")
 Name :vtext  value : tata   --- Type : (kind: dbVarchar, name: "text")
 Name :vonchar  value : Y   --- Type : (kind: dbFixedChar, name: "bpchar")
-Name :vheure  value : 17:34:01   --- Type : (kind: dbTime, name: "time")
+Name :vheure  value : 00:00:00   --- Type : (kind: dbTime, name: "time")
 Name :vkey  value : 1011   --- Type : (kind: dbDecimal, name: "numeric")
 Name :vbool  value : f   --- Type : (kind: dbBool, name: "bool")
 Name :vchar  value : JP-Laroche   --- Type : (kind: dbFixedChar, name: "bpchar")
@@ -163,6 +171,7 @@ name :NBNDOS
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :0
+nullable :false
 maxchar :0
 precision :8
 scale :0
@@ -172,6 +181,7 @@ name :C0ZNOM
 tableName :FC0CLI
 typ :(kind: dbFixedChar, name: "bpchar")
 position :1
+nullable :true
 maxchar :30
 precision :0
 scale :0
@@ -182,6 +192,7 @@ name :vdate
 tableName :tabletype
 typ :(kind: dbDate, name: "date")
 position :1
+nullable :true
 maxchar :0
 precision :0
 scale :0
@@ -191,6 +202,7 @@ name :vnumeric
 tableName :tabletype
 typ :(kind: dbDecimal, name: "numeric")
 position :2
+nullable :true
 maxchar :0
 precision :8
 scale :2
@@ -200,6 +212,7 @@ name :vtext
 tableName :tabletype
 typ :(kind: dbVarchar, name: "text")
 position :3
+nullable :true
 maxchar :0
 precision :0
 scale :0
@@ -209,6 +222,7 @@ name :vonchar
 tableName :tabletype
 typ :(kind: dbFixedChar, name: "bpchar")
 position :4
+nullable :true
 maxchar :1
 precision :0
 scale :0
@@ -218,6 +232,7 @@ name :vheure
 tableName :tabletype
 typ :(kind: dbTime, name: "time")
 position :5
+nullable :true
 maxchar :0
 precision :0
 scale :0
@@ -227,6 +242,7 @@ name :vkey
 tableName :tabletype
 typ :(kind: dbDecimal, name: "numeric")
 position :6
+nullable :false
 maxchar :0
 precision :7
 scale :0
@@ -236,6 +252,7 @@ name :vbool
 tableName :tabletype
 typ :(kind: dbBool, name: "bool")
 position :7
+nullable :false
 maxchar :0
 precision :0
 scale :0
@@ -245,6 +262,7 @@ name :vchar
 tableName :tabletype
 typ :(kind: dbFixedChar, name: "bpchar")
 position :8
+nullable :true
 maxchar :10
 precision :0
 scale :0
@@ -256,6 +274,7 @@ name :NBCAPR
 tableName :FNBDOS
 typ :(kind: dbFixedChar, name: "bpchar")
 position :1
+nullable :true
 maxchar :2
 precision :0
 scale :0
@@ -265,6 +284,7 @@ name :NBCSTD
 tableName :FNBDOS
 typ :(kind: dbFixedChar, name: "bpchar")
 position :2
+nullable :false
 maxchar :8
 precision :0
 scale :0
@@ -274,6 +294,7 @@ name :NBCDPO
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :3
+nullable :false
 maxchar :0
 precision :2
 scale :0
@@ -283,6 +304,7 @@ name :NBCGIM
 tableName :FNBDOS
 typ :(kind: dbFixedChar, name: "bpchar")
 position :4
+nullable :false
 maxchar :1
 precision :0
 scale :0
@@ -292,6 +314,7 @@ name :NBCHTR
 tableName :FNBDOS
 typ :(kind: dbFixedChar, name: "bpchar")
 position :5
+nullable :true
 maxchar :8
 precision :0
 scale :0
@@ -301,6 +324,7 @@ name :NBCREP
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :6
+nullable :true
 maxchar :0
 precision :3
 scale :0
@@ -310,6 +334,7 @@ name :NBCTVC
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :7
+nullable :true
 maxchar :0
 precision :2
 scale :0
@@ -319,6 +344,7 @@ name :NBCUTR
 tableName :FNBDOS
 typ :(kind: dbFixedChar, name: "bpchar")
 position :8
+nullable :true
 maxchar :5
 precision :0
 scale :0
@@ -328,6 +354,7 @@ name :NB999E
 tableName :FNBDOS
 typ :(kind: dbDate, name: "date")
 position :9
+nullable :true
 maxchar :0
 precision :0
 scale :0
@@ -337,6 +364,7 @@ name :NB999M
 tableName :FNBDOS
 typ :(kind: dbDate, name: "date")
 position :10
+nullable :true
 maxchar :0
 precision :0
 scale :0
@@ -346,6 +374,7 @@ name :NBMQOT
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :11
+nullable :true
 maxchar :0
 precision :8
 scale :2
@@ -355,6 +384,7 @@ name :NBMTRF
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :12
+nullable :true
 maxchar :0
 precision :8
 scale :2
@@ -364,6 +394,7 @@ name :NBMPRV
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :13
+nullable :true
 maxchar :0
 precision :8
 scale :2
@@ -373,6 +404,7 @@ name :NBNDOS
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :14
+nullable :false
 maxchar :0
 precision :8
 scale :0
@@ -382,6 +414,7 @@ name :NBNLZE
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :15
+nullable :true
 maxchar :0
 precision :4
 scale :0
@@ -391,6 +424,7 @@ name :NBNCAR
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :16
+nullable :true
 maxchar :0
 precision :2
 scale :0
@@ -400,6 +434,7 @@ name :NBNFEU
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :17
+nullable :true
 maxchar :0
 precision :2
 scale :0
@@ -409,6 +444,7 @@ name :NBQCDE
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :18
+nullable :true
 maxchar :0
 precision :10
 scale :0
@@ -418,6 +454,7 @@ name :NBQFAC
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :19
+nullable :true
 maxchar :0
 precision :10
 scale :0
@@ -427,6 +464,7 @@ name :NBQLVA
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :20
+nullable :true
 maxchar :0
 precision :10
 scale :0
@@ -436,6 +474,7 @@ name :NBQLVR
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :21
+nullable :true
 maxchar :0
 precision :10
 scale :0
@@ -445,6 +484,7 @@ name :NBQLVM
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :22
+nullable :true
 maxchar :0
 precision :10
 scale :0
@@ -454,6 +494,7 @@ name :NBSHS
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :23
+nullable :true
 maxchar :0
 precision :1
 scale :0
@@ -463,6 +504,7 @@ name :NBTTAS
 tableName :FNBDOS
 typ :(kind: dbFixedChar, name: "bpchar")
 position :24
+nullable :true
 maxchar :1
 precision :0
 scale :0
@@ -472,6 +514,7 @@ name :NBXCFT
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :25
+nullable :true
 maxchar :0
 precision :5
 scale :0
@@ -481,6 +524,7 @@ name :NBXCOM
 tableName :FNBDOS
 typ :(kind: dbDecimal, name: "numeric")
 position :26
+nullable :true
 maxchar :0
 precision :5
 scale :2
@@ -490,10 +534,10 @@ name :NBZIMP
 tableName :FNBDOS
 typ :(kind: dbFixedChar, name: "bpchar")
 position :27
+nullable :true
 maxchar :30
 precision :0
 scale :0
 comment :REFERENCE IMPRIME
 ---------------------------
 STOP 
-
