@@ -12,7 +12,7 @@ avec une base de donnée mise à disposition [https://www.postgresqltutorial.com
 
 *<u>dans l'exemple j'ai remis d'aplomb les script pour postgresql</u>*
 
-
+# **grande compatibilité avec DB2 from OS400**
 
 - **VARIABLE** :
 
