@@ -20,7 +20,7 @@ avec une base de donnée mise à disposition [https://www.postgresqltutorial.com
  
  0 *Encours de développement*
 
->   - X__ String
+ - X__ String
  - X__ Zoned fixed String
  - X__ Dcml fixed Numéric
  - X__ Date fixed YYYY-MM-DD
